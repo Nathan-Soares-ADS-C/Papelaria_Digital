@@ -8,8 +8,5 @@ public class PapelariaApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PapelariaApplication.class, args);
-
-
 	}
-
 }
