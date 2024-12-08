@@ -6,6 +6,9 @@ import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,44 +25,51 @@ public class Administrador implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Schema(description = "Nome de usuário do administrador", example = "adminUser")
     private String userName;
 
+    @Schema(description = "Senha do administrador", example = "adminPassword")
     private String password;
 
+    @Schema(description = "Email do administrador", example = "admin@gmail.com")
     private String email;
 
     public void trocarSenha(String novaSenha) {
         this.password = novaSenha;
     }
 
-
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
- 
         return Collections.emptyList();
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return userName;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

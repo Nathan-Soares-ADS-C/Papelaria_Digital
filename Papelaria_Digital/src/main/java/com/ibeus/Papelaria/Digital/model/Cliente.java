@@ -1,16 +1,15 @@
 package com.ibeus.Papelaria.Digital.model;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.ElementCollection;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,70 +17,60 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "clientes")
+@Table(name = "clientes") // Modificado o nome da tabela para "clientes"
 @Data
-public class Cliente implements UserDetails {
+public class Cliente implements UserDetails { // Renomeada a classe de "Administrador" para "Cliente"
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Schema(description = "Nome de usuário do cliente", example = "clienteUser") // Alterado o nome para "clienteUser"
     private String userName;
 
+    @Schema(description = "Senha do cliente", example = "clientePassword") // Alterado o nome para "clientePassword"
     private String password;
 
+    @Schema(description = "Email do cliente", example = "cliente@gmail.com") // Alterado o nome para "cliente@gmail.com"
     private String email;
-
-    private String endereco;
-
-    @ElementCollection(fetch = FetchType.EAGER) // Coletando as permissões diretamente
-    private List<String> roles; // Lista de roles associadas ao cliente
-
-    public void atualizarEndereco(String novoEndereco) {
-        this.endereco = novoEndereco;
-    }
 
     public void trocarSenha(String novaSenha) {
         this.password = novaSenha;
     }
 
-    // Métodos da interface UserDetails
-
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Converter roles em objetos GrantedAuthority
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                .collect(Collectors.toList());
+        return Collections.emptyList(); // Pode ser alterado conforme os requisitos de permissões do cliente
     }
 
     @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
+    @JsonIgnore
     public String getUsername() {
         return userName;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
-        return true; // Defina a lógica conforme sua necessidade
+        return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
-        return true; // Defina a lógica conforme sua necessidade
+        return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
-        return true; // Defina a lógica conforme sua necessidade
+        return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
-        return true; // Defina a lógica conforme sua necessidade
+        return true;
     }
 }
