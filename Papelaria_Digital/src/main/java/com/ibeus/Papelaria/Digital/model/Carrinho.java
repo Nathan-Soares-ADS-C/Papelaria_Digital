@@ -19,10 +19,9 @@ public class Carrinho {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idItem;
 
-    // Relacionamento com a entidade Produto (anteriormente Prato)
     @ManyToOne
-    @JoinColumn(name = "id_produto", referencedColumnName = "id", nullable = false) // Alterado para id_produto
-    private Produto produto; // Alterado de prato para produto
+    @JoinColumn(name = "id_produto", referencedColumnName = "id", nullable = false)
+    private Produto produto;
 
     @Column(nullable = false)
     private Integer quantidade;
@@ -30,4 +29,5 @@ public class Carrinho {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "userId", nullable = false)
     private Cliente cliente;
+
 }

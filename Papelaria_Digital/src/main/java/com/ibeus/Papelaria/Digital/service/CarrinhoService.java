@@ -1,14 +1,13 @@
 package com.ibeus.Papelaria.Digital.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ibeus.Papelaria.Digital.model.Carrinho;
-import com.ibeus.Papelaria.Digital.model.Produto;
 import com.ibeus.Papelaria.Digital.repository.CarrinhoRepository;
-import com.ibeus.Papelaria.Digital.repository.ProdutoRepository;
 
 @Service
 public class CarrinhoService {
@@ -16,46 +15,44 @@ public class CarrinhoService {
     @Autowired
     private CarrinhoRepository carrinhoRepository;
 
-    @Autowired
-    private ProdutoRepository produtoRepository;
+    public List<Carrinho> findByUserId(Long userId) {
+        return carrinhoRepository.findByClienteUserId(userId);
+    }
 
-    public List<Carrinho> listarTodos() {
+    public List<Carrinho> getAllCarrinhos() {
         return carrinhoRepository.findAll();
     }
 
-    public Carrinho adicionarProdutoAoCarrinho(Long produtoId, Integer quantidade) {
-        Produto produto = produtoRepository.findById(produtoId)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado!"));
-
-        Carrinho carrinhoExistente = carrinhoRepository.findAll().stream()
-                .filter(c -> c.getProduto().getId().equals(produtoId))
-                .findFirst()
-                .orElse(null);
-
-        if (carrinhoExistente != null) {
-            carrinhoExistente.setQuantidade(carrinhoExistente.getQuantidade() + quantidade);
-            return carrinhoRepository.save(carrinhoExistente);
-        } else {
-            Carrinho novoItem = new Carrinho();
-            novoItem.setProduto(produto);
-            novoItem.setQuantidade(quantidade);
-            return carrinhoRepository.save(novoItem);
-        }
+    public Carrinho getCarrinhoById(Long id) {
+        Optional<Carrinho> carrinho = carrinhoRepository.findById(id);
+        return carrinho.orElse(null);
     }
 
-    // Atualiza a quantidade de um item no carrinho
-    public Carrinho atualizarQuantidade(Long idItem, Integer quantidade) {
-        Carrinho carrinho = carrinhoRepository.findById(idItem)
-                .orElseThrow(() -> new RuntimeException("Item do carrinho não encontrado!"));
-        carrinho.setQuantidade(quantidade);
+    public Carrinho createCarrinho(Carrinho carrinho) {
         return carrinhoRepository.save(carrinho);
     }
 
-    // Deleta um item do carrinho
-    public void deletarItem(Long idItem) {
-        if (!carrinhoRepository.existsById(idItem)) {
-            throw new RuntimeException("Item do carrinho não encontrado!");
+    public Carrinho updateCarrinho(Long id, Carrinho carrinhoDetails) {
+        Optional<Carrinho> optionalCarrinho = carrinhoRepository.findById(id);
+        if (optionalCarrinho.isPresent()) {
+            Carrinho carrinho = optionalCarrinho.get();
+            carrinho.setProduto(carrinhoDetails.getProduto());
+            carrinho.setQuantidade(carrinhoDetails.getQuantidade());
+            carrinho.setCliente(carrinhoDetails.getCliente());
+            return carrinhoRepository.save(carrinho);
+        } else {
+            return null;
         }
-        carrinhoRepository.deleteById(idItem);
     }
+
+    public boolean deleteCarrinho(Long id) {
+        Optional<Carrinho> optionalCarrinho = carrinhoRepository.findById(id);
+        if (optionalCarrinho.isPresent()) {
+            carrinhoRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
 }

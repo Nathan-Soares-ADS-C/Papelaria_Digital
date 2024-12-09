@@ -4,14 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ibeus.Papelaria.Digital.model.Carrinho;
@@ -19,38 +18,47 @@ import com.ibeus.Papelaria.Digital.service.CarrinhoService;
 
 @RestController
 @RequestMapping("/carrinho")
-@CrossOrigin(origins = "http://localhost:4200")
 public class CarrinhoController {
 
     @Autowired
     private CarrinhoService carrinhoService;
 
+    // Método para obter todos os carrinhos
     @GetMapping
-    public List<Carrinho> listarCarrinho() {
-        return carrinhoService.listarTodos();
+    public List<Carrinho> getAllCarrinhos() {
+        return carrinhoService.getAllCarrinhos();
     }
 
-    @PostMapping("/adicionar")
-    public ResponseEntity<Carrinho> adicionarPrato(
-            @RequestParam Long pratoId, 
-            @RequestParam Integer quantidade
-    ) {
-        Carrinho novoItem = carrinhoService.adicionarProdutoAoCarrinho(pratoId, quantidade);
-        return ResponseEntity.ok(novoItem);
+    // Método para buscar o carrinho de um usuário específico pelo userId
+    @GetMapping("/user/{userId}")
+    public List<Carrinho> getCarrinhoByUserId(@PathVariable Long userId) {
+        return carrinhoService.findByUserId(userId);
     }
 
-    @PutMapping("/atualizar-quantidade/{idItem}")
-    public ResponseEntity<Carrinho> atualizarQuantidade(
-            @PathVariable Long idItem, 
-            @RequestParam Integer quantidade
-    ) {
-        Carrinho atualizado = carrinhoService.atualizarQuantidade(idItem, quantidade);
-        return ResponseEntity.ok(atualizado);
+    // Método para criar um novo carrinho
+    @PostMapping
+    public Carrinho createCarrinho(@RequestBody Carrinho carrinho) {
+        return carrinhoService.createCarrinho(carrinho);
     }
 
-    @DeleteMapping("/deletar/{idItem}")
-    public ResponseEntity<Void> deletarPrato(@PathVariable Long idItem) {
-        carrinhoService.deletarItem(idItem);
-        return ResponseEntity.noContent().build();
+    // Método para atualizar um carrinho existente
+    @PutMapping("/{id}")
+    public ResponseEntity<Carrinho> updateCarrinho(@PathVariable Long id, @RequestBody Carrinho carrinhoDetails) {
+        Carrinho updatedCarrinho = carrinhoService.updateCarrinho(id, carrinhoDetails);
+        if (updatedCarrinho != null) {
+            return ResponseEntity.ok(updatedCarrinho);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Método para deletar um carrinho
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCarrinho(@PathVariable Long id) {
+        if (carrinhoService.deleteCarrinho(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

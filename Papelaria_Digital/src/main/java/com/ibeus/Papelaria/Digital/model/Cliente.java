@@ -34,6 +34,9 @@ public class Cliente implements UserDetails { // Renomeada a classe de "Administ
     @Schema(description = "Email do cliente", example = "cliente@gmail.com") // Alterado o nome para "cliente@gmail.com"
     private String email;
 
+    @Schema(description = "Endereco do cliente", example = "Example Street, 123")
+    private String endereco;
+
     public void trocarSenha(String novaSenha) {
         this.password = novaSenha;
     }
