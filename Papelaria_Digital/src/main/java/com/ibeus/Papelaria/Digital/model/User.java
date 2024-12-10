@@ -23,7 +23,7 @@ import lombok.Setter;
 @Table(name = "users")
 @Entity(name = "users")
 @Getter
-@Setter // Adicionei essa anotação para gerar os métodos set
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -32,18 +32,22 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String login;
-    private String password; // Corrigi aqui, estava "passord"
+    private String password; // Corrigi aqui tava "passord"
     private String role;
 
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if ("ADMIN".equals(this.role)) {
-            return List.of(new SimpleGrantedAuthority("ADMIN"), new SimpleGrantedAuthority("USER"));
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_USER")
+            );
         } else {
-            return List.of(new SimpleGrantedAuthority("USER"));
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
         }
     }
+
 
     @Override
     @JsonIgnore

@@ -1,41 +1,41 @@
 package com.ibeus.Papelaria.Digital.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ibeus.Papelaria.Digital.model.Pagamento;
 import com.ibeus.Papelaria.Digital.service.PagamentoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/pagamentos")
+@RequestMapping("/pagamentos")
 public class PagamentoController {
 
-    private final PagamentoService pagamentoService;
+    @Autowired
+    private PagamentoService pagamentoService;
 
-    public PagamentoController(PagamentoService pagamentoService) {
-        this.pagamentoService = pagamentoService;
+    @GetMapping
+    public List<Pagamento> getAllPagamentos() {
+        return pagamentoService.getAllPagamentos();
     }
 
-    // Endpoint para listar as opções de pagamento
-    @GetMapping("/opcoes")
-    public ResponseEntity<List<String>> getOpcoesPagamento() {
-        return ResponseEntity.ok(pagamentoService.getOpcoesPagamento());
+    @GetMapping("/{id}")
+    public Pagamento getPagamentoById(@PathVariable long id) {
+        return pagamentoService.getPagamentoById(id);
     }
 
-    // Endpoint para processar o pagamento
-    @PostMapping("/finalizar")
-    public ResponseEntity<Pagamento> processarPagamento(@RequestBody String tipoPagamento) {
-        Pagamento pagamento = pagamentoService.processarPagamento(tipoPagamento);
-        if (pagamento != null) {
-            return ResponseEntity.ok(pagamento);
-        } else {
-            return ResponseEntity.badRequest().body(new Pagamento(null, "Tipo de pagamento inválido."));
-        }
+    @PostMapping
+    public Pagamento createPagamento(@RequestBody Pagamento pagamento) {
+        return pagamentoService.savePagamento(pagamento);
+    }
+
+    @PutMapping("/{id}")
+    public Pagamento updatePagamento(@PathVariable long id, @RequestBody Pagamento pagamento) {
+        return pagamentoService.updatePagamento(id, pagamento);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletePagamento(@PathVariable long id) {
+        pagamentoService.deletePagamento(id);
     }
 }

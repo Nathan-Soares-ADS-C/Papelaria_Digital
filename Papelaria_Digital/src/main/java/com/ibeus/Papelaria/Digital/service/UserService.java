@@ -28,6 +28,16 @@ public class UserService implements UserDetailsService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+    public Optional<User> findById(Long id) {
+        try {
+            return userRepository.findById(id);
+        } catch (Exception e) {
+            // Log do erro
+            System.err.println("Erro ao buscar usuário com ID " + id);
+            e.printStackTrace();
+            return Optional.empty(); // Retorna vazio em caso de erro
+        }
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

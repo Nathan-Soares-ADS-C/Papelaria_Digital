@@ -1,6 +1,7 @@
 package com.ibeus.Papelaria.Digital.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,20 +24,27 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+     http
             .csrf().disable()
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                .requestMatchers("/user/**").hasAuthority("USER")
+                .requestMatchers(HttpMethod.POST, "/api/produtos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/produtos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/produtos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/pedidos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/pedidos/{id}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/pedidos/{id}/status").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
+                .requestMatchers("/users/admin").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin()
             .and()
             .httpBasic();
 
-        return http.build();
-    }
+    return http.build();
+}
+
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {

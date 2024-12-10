@@ -16,23 +16,17 @@ public class Pagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "id_user", referencedColumnName = "id", nullable = false)
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "price", referencedColumnName = "price", nullable = false)
-    private Pedido pedido;
+    private long id;
 
     private String tipoPagamento;
 
-    private String mensagem;
+    @ManyToOne
+    @JoinColumn(name = "id_pedido", referencedColumnName = "id", nullable = false)
+    private Pedido pedido;
 
-    public Pagamento(String tipoPagamento, String mensagem) {
+    public Pagamento(String tipoPagamento, String mensagem, Pedido pedido) {
         this.tipoPagamento = tipoPagamento;
-        this.mensagem = mensagem;
+        this.pedido = pedido;
     }
 
     public Pagamento() {
