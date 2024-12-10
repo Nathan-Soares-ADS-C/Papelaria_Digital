@@ -15,10 +15,6 @@ public class CarrinhoService {
     @Autowired
     private CarrinhoRepository carrinhoRepository;
 
-    public List<Carrinho> findByUserId(Long userId) {
-        return carrinhoRepository.findByClienteUserId(userId);
-    }
-
     public List<Carrinho> getAllCarrinhos() {
         return carrinhoRepository.findAll();
     }
@@ -38,7 +34,6 @@ public class CarrinhoService {
             Carrinho carrinho = optionalCarrinho.get();
             carrinho.setProduto(carrinhoDetails.getProduto());
             carrinho.setQuantidade(carrinhoDetails.getQuantidade());
-            carrinho.setCliente(carrinhoDetails.getCliente());
             return carrinhoRepository.save(carrinho);
         } else {
             return null;

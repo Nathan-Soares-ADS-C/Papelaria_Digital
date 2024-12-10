@@ -29,12 +29,6 @@ public class CarrinhoController {
         return carrinhoService.getAllCarrinhos();
     }
 
-    // Método para buscar o carrinho de um usuário específico pelo userId
-    @GetMapping("/user/{userId}")
-    public List<Carrinho> getCarrinhoByUserId(@PathVariable Long userId) {
-        return carrinhoService.findByUserId(userId);
-    }
-
     // Método para criar um novo carrinho
     @PostMapping
     public Carrinho createCarrinho(@RequestBody Carrinho carrinho) {

@@ -26,8 +26,4 @@ public class Carrinho {
     @Column(nullable = false)
     private Integer quantidade;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "userId", nullable = false)
-    private Cliente cliente;
-
 }
