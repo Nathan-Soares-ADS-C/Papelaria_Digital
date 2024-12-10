@@ -20,6 +20,10 @@ public class Carrinho {
     private Long idItem;
 
     @ManyToOne
+    @JoinColumn(name = "id_user", referencedColumnName = "id", nullable = false)
+    private User user;
+
+    @ManyToOne
     @JoinColumn(name = "id_produto", referencedColumnName = "id", nullable = false)
     private Produto produto;
 
