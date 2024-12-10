@@ -26,6 +26,13 @@ public class PedidoService {
     public Pedido salvar(Pedido pedido) {
         return pedidoRepository.save(pedido);
     }
+    public Pedido updatePedido(Pedido pedido) {
+        if (pedidoRepository.existsById(pedido.getId())) {
+            return pedidoRepository.save(pedido);
+        }
+        throw new RuntimeException("Pedido não encontrado com o ID: " + pedido.getId());
+    }
+
 
     public Pedido atualizarStatus(Long id, String novoStatus) {
         Optional<Pedido> pedidoOptional = pedidoRepository.findById(id);
