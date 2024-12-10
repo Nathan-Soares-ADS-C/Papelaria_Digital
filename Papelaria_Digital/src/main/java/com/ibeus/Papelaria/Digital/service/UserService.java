@@ -32,10 +32,9 @@ public class UserService implements UserDetailsService {
         try {
             return userRepository.findById(id);
         } catch (Exception e) {
-            // Log do erro
             System.err.println("Erro ao buscar usuário com ID " + id);
             e.printStackTrace();
-            return Optional.empty(); // Retorna vazio em caso de erro
+            return Optional.empty(); 
         }
     }
 

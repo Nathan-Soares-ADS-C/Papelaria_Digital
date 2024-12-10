@@ -32,7 +32,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String login;
-    private String password; // Corrigi aqui tava "passord"
+    private String password; 
     private String role;
 
     @Override
