@@ -16,8 +16,7 @@ public class PagamentoService {
     private PagamentoRepository pagamentoRepository;
 
     @Autowired
-    private PedidoService pedidoService;  // Adiciona a dependência do PedidoService
-
+    private PedidoService pedidoService;  
     public List<Pagamento> getAllPagamentos() {
         return pagamentoRepository.findAll();
     }
@@ -29,12 +28,11 @@ public class PagamentoService {
     public Pagamento savePagamento(Pagamento pagamento) {
         if (pagamento.getPedido() != null) {
             Pedido pedido = pagamento.getPedido();
-            // Atualiza o status do pedido
+            
             pedido.setStatus("Pagamento Realizado");
-            pedidoService.updatePedido(pedido);  // Salva o pedido com o novo status
+            pedidoService.updatePedido(pedido);  
         }
 
-        // Salva o pagamento
         return pagamentoRepository.save(pagamento);
     }
 

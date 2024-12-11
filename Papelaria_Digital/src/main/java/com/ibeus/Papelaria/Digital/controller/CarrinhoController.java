@@ -23,19 +23,16 @@ public class CarrinhoController {
     @Autowired
     private CarrinhoService carrinhoService;
 
-    // Método para obter todos os carrinhos
     @GetMapping
     public List<Carrinho> getAllCarrinhos() {
         return carrinhoService.getAllCarrinhos();
     }
 
-    // Método para criar um novo carrinho
     @PostMapping
     public Carrinho createCarrinho(@RequestBody Carrinho carrinho) {
         return carrinhoService.createCarrinho(carrinho);
     }
 
-    // Método para atualizar um carrinho existente
     @PutMapping("/{id}")
     public ResponseEntity<Carrinho> updateCarrinho(@PathVariable Long id, @RequestBody Carrinho carrinhoDetails) {
         Carrinho updatedCarrinho = carrinhoService.updateCarrinho(id, carrinhoDetails);
@@ -46,7 +43,6 @@ public class CarrinhoController {
         }
     }
 
-    // Método para deletar um carrinho
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCarrinho(@PathVariable Long id) {
         if (carrinhoService.deleteCarrinho(id)) {

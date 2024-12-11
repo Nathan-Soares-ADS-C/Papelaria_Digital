@@ -30,6 +30,5 @@ public class Pagamento {
     }
 
     public Pagamento() {
-        // Construtor padrão necessário para JPA
     }
 }

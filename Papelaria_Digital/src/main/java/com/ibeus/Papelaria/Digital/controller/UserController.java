@@ -36,9 +36,8 @@ public class UserController {
         Optional<User> user = userService.findById(id);
 
         if (user.isPresent()) {
-            return ResponseEntity.ok(user.get()); // Retorna usuário se encontrado
+            return ResponseEntity.ok(user.get()); 
         } else {
-            // Retorna 404 caso o usuário não seja encontrado
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                  .body(null);
         }
@@ -65,10 +64,10 @@ public class UserController {
         @ApiResponse(responseCode = "400", description = "Erro de validação")
     })
     public User createUserAdmin(@RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));  // Codificando a senha
-        user.setRole("ADMIN");  // Definindo o papel como ADMIN
+        user.setPassword(passwordEncoder.encode(user.getPassword())); 
+        user.setRole("ADMIN");  
 
-        return userService.saveUser(user);  // Salvando o usuário no banco de dados
+        return userService.saveUser(user);  
     }
 
     @DeleteMapping("/{id}")
